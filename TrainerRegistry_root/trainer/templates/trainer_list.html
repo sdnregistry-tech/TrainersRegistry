@@ -1,0 +1,62 @@
+{% extends "home.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<h2 class="text-2xl font-bold mb-4">List of Registered Trainers</h2>
+
+<!-- 🔍 Search Bar -->
+<form method="get" class="mb-4">
+  <div class="flex gap-2">
+    <input
+      type="text"
+      name="q"
+      value="{{ request.GET.q }}"
+      placeholder="Search by name, email, or contact..."
+      class="border px-4 py-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+    >
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+      <i class="fas fa-search"></i>
+    </button>
+  </div>
+</form>
+
+<table class="table-auto w-full bg-white shadow rounded">
+  <thead class="bg-gray-200">
+    <tr>
+      <th class="px-4 py-2">ID</th>
+      <th class="px-4 py-2">Full Name</th>
+      <th class="px-4 py-2">Email</th>
+      <th class="px-4 py-2">Contact Number</th>
+      <th class="px-4 py-2">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for trainer in trainers %}
+    <tr class="border-t text-center">
+      <td class="px-4 py-2">{{ trainer.id }}</td>
+      <td class="px-4 py-2">
+        {{ trainer.last_name }}, {{ trainer.first_name }} {{ trainer.middle_name }}
+      </td>
+      <td class="px-4 py-2">{{ trainer.email }}</td>
+      <td class="px-4 py-2">{{ trainer.contact_number }}</td>
+      <td class="px-4 py-2">
+        <a href="{% url 'add_qualification' trainer.id %}" class="btn btn-sm btn-primary">
+          <i class="fas fa-plus"></i>
+        </a>
+        <a href="{% url 'trainer_qualifications' trainer.id %}" class="btn btn-sm btn-secondary">
+          <i class="fas fa-eye"></i>
+        </a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="5" class="text-center py-4 text-gray-500">
+        No trainers found.
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

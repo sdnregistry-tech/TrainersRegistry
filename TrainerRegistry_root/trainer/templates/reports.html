@@ -1,0 +1,78 @@
+{% extends 'home.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>Trainer Registry Report</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        <h4 class="mb-3 fw-bold">Trainer Qualifications Report</h4>
+
+        <form method="get" class="row g-3 mb-4">
+            <div class="col-md-4">
+                <label class="form-label">Trainer Name:</label>
+                <input type="text" name="name" value="{{ request.GET.name }}" class="form-control" placeholder="e.g. Anna">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Certificate name:</label>
+                <input type="text" name="certificate_name" value="{{ request.GET.certificate_name }}" class="form-control" placeholder="e.g. Cookery NC II">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Date from:</label>
+                <input type="date" name="date_from" value="{{ request.GET.date_from }}" class="form-control">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Date to:</label>
+                <input type="date" name="date_to" value="{{ request.GET.date_to }}" class="form-control">
+            </div>
+            <div class="col-12 d-flex justify-content-end gap-2">
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <button type="submit" name="export" value="1" class="btn btn-success">Export to Excel</button>
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped align-middle text-center">
+                <thead class="table-light">
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Contact</th>
+                        <th>Qualification Title</th>
+                        <th>NTTC Number</th>
+                        <th>Validity Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for q in qualifications %}
+                        <tr>
+                            <td>{{ q.trainer.first_name }} {{ q.trainer.last_name }}</td>
+                            <td>{{ q.trainer.email }}</td>
+                            <td>{{ q.trainer.contact_number }}</td>  {# or q.trainer.contact if that’s the field #}
+                            <td>{{ q.certificate_name }}</td>
+                            <td>{{ q.nttc_number }}</td>
+                            <td>{{ q.validity_date|date:"M. d, Y" }}</td>
+                            <td>
+                                {% if q.validity_date < today %}
+                                    <span class="badge bg-danger">Expired</span>
+                                {% else %}
+                                    <span class="badge bg-success">Valid</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-muted">No data found matching your filters.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+{% endblock %}
