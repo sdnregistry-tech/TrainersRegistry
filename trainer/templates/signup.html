@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">   
+{% load static %} 
+<head>
+   <meta charset="UTF-8">
+    <title>Sign Up | Trainer Registry</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #0056b3, #1e90ff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-box {
+            background-color: white;
+            padding: 40px 30px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
+
+        .login-box h2 {
+            text-align: center;
+            color: #0056b3;
+            margin-bottom: 25px;
+        }
+
+        .login-box label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .login-box input[type="text"],
+        .login-box input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background-color: #0056b3;
+            color: white;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .login-box button:hover {
+            background-color: #004599;
+        }
+
+        .login-box .create-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+        .login-box .create-link:hover {
+            color: #003a80;
+        }
+
+        
+        .logo-container {
+         display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 10px;
+}
+
+        .logo-img {
+         width: 80px; /* Adjust as needed */
+         height: auto;
+}
+    </style>
+</head>
+<div class="login-box">
+     <div class="logo-container">
+    <img src="{% static 'image/TESDA Logo official.png' %}" alt="LogoLogin" width="80" >
+    </div>
+
+    <h2>Login</h2>
+    <form method="POST">
+        {% csrf_token %} 
+        <h3>Signup Here</h3>
+
+        <label for="username">Username</label>
+        <input type="text" placeholder="Username" name="username" id="username">
+
+        <label for="email">Email</label>
+        <input type="email" placeholder="Email or Phone" name="email" id="email">
+
+        <label for="password1">Password</label>
+        <input type="password" placeholder="Password" id="password1" name="password1">
+
+
+        <label for="password2">Confrom Password</label>
+        <input type="password" placeholder="Confrom Password" id="password2" name="password2">
+        <button type="submit">Signup</button>
+        
+        <a href="{% url 'login' %}" >i have already account</a>
+    </form>
+</div>
+</body>
+</html>

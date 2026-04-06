@@ -1,0 +1,26 @@
+{% extends 'home.html' %}
+
+{% block content %}
+{% load static %}
+<div class="row justify-content-center">
+  <div class="col-12 col-md-10 col-lg-7 col-xl-6">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-4">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+          <h4 class="card-title mb-0">{% if qualification %}Edit{% else %}Add{% endif %} Qualification</h4>
+        </div>
+        <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <div class="d-flex gap-2 mt-3">
+            <button type="submit" class="btn btn-primary">
+              {% if qualification %}Update{% else %}Save{% endif %}
+            </button>
+            <a href="{% url 'trainer_qualifications' qualification.trainer.id %}" class="btn btn-outline-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'home.html' %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+  <div>
+    <h4 class="mb-0">Qualifications</h4>
+    <div class="text-muted small">For {{ assessor.first_name }} {{ assessor.last_name }}</div>
+  </div>
+  <div class="d-flex gap-2">
+    <a href="{% url 'add_assessor_qualification' assessor.id %}" class="btn btn-primary btn-sm">
+      <i class="fa-solid fa-plus me-1"></i> Add Qualification
+    </a>
+  </div>
+</div>
+
+{% if qualifications %}
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Certificate Name</th>
+        <th>NTTC Number</th>
+        <th>Validity Date</th>
+        <th>Status</th>
+        <th>Actions</th>
+        <th>Resend</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for q in qualifications %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ q.certificate_name }}</td>
+        <td>{{ q.nttc_number }}</td>
+        <td>{{ q.validity_date|date:"F j, Y" }}</td>
+        <td>
+          {% if q.status == "Active" %}
+            <span class="badge bg-success">{{ q.status }}</span>
+          {% elif q.status == "Expired" %}
+            <span class="badge bg-danger">{{ q.status }}</span>
+          {% elif q.status == "For Renewal" %}
+            <span class="badge bg-warning text-dark">{{ q.status }}</span>
+          {% else %}
+            <span class="badge bg-secondary">{{ q.status }}</span>
+          {% endif %}
+        </td>
+        <td>
+          <!-- Edit Qualification -->
+          <a href="{% url 'edit_qualification' q.id %}" class="btn btn-sm btn-success">
+            <i class="fa-solid fa-pen-to-square"></i>
+          </a>
+
+          <!-- Delete Qualification -->
+          <form action="{% url 'delete_assessor' q.id %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this qualification?');">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </form>
+        </td>
+        <td>
+          <form action="{% url 'resend_assessor_qualification_email' q.id %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-primary btn-sm" title="Resend Email">
+              <i class="fas fa-envelope"></i> Resend
+            </button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p>No qualifications found for this assessor.</p>
+{% endif %}
+{% endblock %}

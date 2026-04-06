@@ -1,0 +1,40 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-sm mx-auto" style="max-width: 600px;">
+        <div class="card-body">
+            <h4 class="card-title">Update Qualification</h4>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <label>Certificate Name:</label>
+                <input type="text" name="certificate_name" class="form-control"
+                       value="{{ qualification.certificate_name }}">
+
+                <label class="mt-2">NTTC Number:</label>
+                <input type="text" name="nttc_number" class="form-control"
+                       value="{{ qualification.nttc_number }}">
+
+                <label class="mt-2">Validity Date:</label>
+                <input type="date" name="validity_date" class="form-control"
+                       value="{{ qualification.validity_date|date:'Y-m-d' }}">
+
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-primary">Update</button>
+
+                    {% if qualification.assessor %}
+                        <a href="{% url 'assessor_qualifications' qualification.assessor.id %}" 
+                           class="btn btn-secondary">Cancel</a>
+                    {% else %}
+                        <a href="#" class="btn btn-secondary">Cancel</a>
+                    {% endif %}
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
