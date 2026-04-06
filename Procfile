@@ -1,0 +1,1 @@
+web: gunicorn TrainerRegistry_root.wsgi
