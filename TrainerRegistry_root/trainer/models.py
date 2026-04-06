@@ -60,3 +60,47 @@ class EmailLog(models.Model):
 
     class Meta:
         unique_together = ('trainer', 'qualification', 'sent_for_days_before')
+
+from django.db import models
+
+from django.db import models
+
+class Assessor(models.Model):
+    first_name = models.CharField(max_length=100)
+    middle_name = models.CharField(max_length=100, blank=True, default='')  # optional
+    last_name = models.CharField(max_length=100)
+    gender = models.CharField(
+        max_length=10,
+        choices=[('Male', 'Male'), ('Female', 'Female')],
+        default='Male'  # default value avoids the prompt
+    )
+    address = models.CharField(max_length=255, blank=True, default='')
+    birthdate = models.DateField(null=True, blank=True)
+    qualification = models.CharField(max_length=255, default='Not specified')  # must have default
+    email = models.EmailField(unique=True)
+    contact_number = models.CharField(max_length=20, blank=True, default='')
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+    
+from datetime import date
+from django.db import models
+
+class AssessorQualification(models.Model):
+    assessor = models.ForeignKey('Assessor', on_delete=models.CASCADE, related_name='qualifications')
+    certificate_name = models.CharField(max_length=255)
+    nttc_number = models.CharField(max_length=50, blank=True, null=True)
+    validity_date = models.DateField(blank=True, null=True)
+
+    @property
+    def status(self):
+        """Return the status of the qualification based on validity_date"""
+        if not self.validity_date:
+            return "N/A"
+        today = date.today()
+        if self.validity_date < today:
+            return "Expired"
+        elif (self.validity_date - today).days <= 30:
+            return "For Renewal"
+        else:
+            return "Active"

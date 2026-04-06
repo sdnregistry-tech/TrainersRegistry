@@ -42,6 +42,29 @@ class CustomSetPasswordForm(SetPasswordForm):
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'id': 'id_new_password2'})
     )
 
+from django import forms
+from .models import Assessor
 
+class AssessorForm(forms.ModelForm):
+    class Meta:
+        model = Assessor
+        fields = '__all__'
 
+from django import forms
+from .models import AssessorQualification
 
+class AssessorQualificationForm(forms.ModelForm):
+    class Meta:
+        model = AssessorQualification
+        fields = ['certificate_name', 'nttc_number', 'validity_date']
+
+from django import forms
+from .models import Assessor
+
+class AssessorForm(forms.ModelForm):
+    class Meta:
+        model = Assessor
+        fields = [
+            'first_name', 'middle_name', 'last_name', 'gender', 'address',
+            'birthdate', 'qualification', 'email', 'contact_number'
+        ]

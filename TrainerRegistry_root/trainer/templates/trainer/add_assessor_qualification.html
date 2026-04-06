@@ -1,0 +1,68 @@
+{% extends "home.html" %}
+{% block content %}
+<div class="mb-4 d-flex justify-content-between align-items-center">
+    <h4>{{ assessor.first_name }} {{ assessor.last_name }} - Qualifications</h4>
+</div>
+
+<!-- Display messages -->
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+  {% endfor %}
+{% endif %}
+
+<!-- Add New Qualification Form -->
+<div class="col-md-6 mb-4">
+    <h5>Add New Qualification</h5>
+    <form method="post" action="{% url 'add_assessor_qualification' assessor.id %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label>Certificate Name</label>
+            <input type="text" name="certificate_name" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label>NTTC Number</label>
+            <input type="text" name="nttc_number" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label>Validity Date</label>
+            <input type="date" name="validity_date" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-success">Add Qualification</button>
+    </form>
+</div>
+
+<!-- List Existing Qualifications -->
+{% if qualifications %}
+<div class="col-md-12 mt-4">
+    <h5>Existing Qualifications</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Certificate Name</th>
+                <th>Title</th>
+                <th>NTTC Number</th>
+                <th>Validity Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for qual in qualifications %}
+            <tr>
+                <td>{{ qual.certificate_name }}</td>
+                <td>{{ qual.title }}</td>
+                <td>{{ qual.nttc_number }}</td>
+                <td>{{ qual.validity_date }}</td>
+                <td>
+                    <a href="{% url 'edit_assessor_qualification' qual.id %}" class="btn btn-sm btn-success">Edit</a>
+                    <a href="{% url 'delete_assessor_qualification' qual.id %}" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<a href="{% url 'assessor_list' %}" class="btn btn-secondary mt-3">Back to Assessors List</a>
+{% endblock %}

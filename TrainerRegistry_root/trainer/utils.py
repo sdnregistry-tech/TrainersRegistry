@@ -4,9 +4,10 @@ from django.conf import settings
 from django.utils import timezone
 from trainer.models import EmailLog
 
-def send_expired_notice(qualification, reminder_days=0):
+def send_expired_notice(qualification, reminder_days=0, force_resend=False):
     """
     Sends email reminders before expiry or on expiry day.
+    reminder_days = 90 -> 90-day-before reminder
     reminder_days = 1 -> 1-day-before reminder
     reminder_days = 0 -> expired email
     """
@@ -14,10 +15,10 @@ def send_expired_notice(qualification, reminder_days=0):
     trainer = qualification.trainer
     notify_date = qualification.validity_date - timezone.timedelta(days=reminder_days)
 
-    if today != notify_date:
+    if not force_resend and today != notify_date:
         return False  
 
-    if EmailLog.objects.filter(
+    if not force_resend and EmailLog.objects.filter(
         trainer=trainer,
         qualification=qualification,
         sent_for_days_before=reminder_days
@@ -49,10 +50,11 @@ def send_expired_notice(qualification, reminder_days=0):
         fail_silently=False,
     )
 
-    EmailLog.objects.create(
-        trainer=trainer,
-        qualification=qualification,
-        sent_for_days_before=reminder_days
-    )
+    if not force_resend:
+        EmailLog.objects.create(
+            trainer=trainer,
+            qualification=qualification,
+            sent_for_days_before=reminder_days
+        )
 
     return True

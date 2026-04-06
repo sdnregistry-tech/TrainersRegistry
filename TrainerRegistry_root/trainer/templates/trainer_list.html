@@ -1,28 +1,31 @@
 {% extends "home.html" %}
 {% block content %}
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<h2 class="text-2xl font-bold mb-4">List of Registered Trainers</h2>
+<div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+  <div>
+    <h4 class="mb-0">List of Registered Trainers</h4>
+    <div class="text-muted small">Search and manage trainer records</div>
+  </div>
+</div>
 
 <!-- 🔍 Search Bar -->
 <form method="get" class="mb-4">
-  <div class="flex gap-2">
+  <div class="d-flex gap-2">
     <input
       type="text"
       name="q"
       value="{{ request.GET.q }}"
       placeholder="Search by name, email, or contact..."
-      class="border px-4 py-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+      class="form-control"
     >
-    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-      <i class="fas fa-search"></i>
+    <button type="submit" class="btn btn-primary">
+      <i class="fa-solid fa-magnifying-glass"></i>
     </button>
   </div>
 </form>
 
-<table class="table-auto w-full bg-white shadow rounded">
-  <thead class="bg-gray-200">
+<div class="table-responsive">
+<table class="table table-hover align-middle">
+  <thead class="table-light">
     <tr>
       <th class="px-4 py-2">ID</th>
       <th class="px-4 py-2">Full Name</th>
@@ -33,7 +36,7 @@
   </thead>
   <tbody>
     {% for trainer in trainers %}
-    <tr class="border-t text-center">
+    <tr class="text-center">
       <td class="px-4 py-2">{{ trainer.id }}</td>
       <td class="px-4 py-2">
         {{ trainer.last_name }}, {{ trainer.first_name }} {{ trainer.middle_name }}
@@ -42,10 +45,10 @@
       <td class="px-4 py-2">{{ trainer.contact_number }}</td>
       <td class="px-4 py-2">
         <a href="{% url 'add_qualification' trainer.id %}" class="btn btn-sm btn-primary">
-          <i class="fas fa-plus"></i>
+          <i class="fa-solid fa-plus"></i>
         </a>
         <a href="{% url 'trainer_qualifications' trainer.id %}" class="btn btn-sm btn-secondary">
-          <i class="fas fa-eye"></i>
+          <i class="fa-solid fa-eye"></i>
         </a>
       </td>
     </tr>
@@ -58,5 +61,6 @@
     {% endfor %}
   </tbody>
 </table>
+</div>
 
 {% endblock %}
